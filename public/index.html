@@ -1,0 +1,1647 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Math Competition App</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Comic Sans MS', 'Chalkboard SE', 'Segoe UI', sans-serif;
+      transition: background-color .2s ease, color .2s ease, border-color .2s ease;
+    }
+    body.theme-pink {
+      --bg-body: #fde2e4;
+      --bg-container: #ffccd5;
+      --bg-card: #fff0f5;
+      --bg-nav: #ffb3c6;
+      --bg-btn: #ff4d6d;
+      --text-main: #2b2b2b;
+      --text-btn: #fff;
+      --border-color: #333;
+    }
+    body.theme-bluegreen {
+      --bg-body: #e0f4f7;
+      --bg-container: #b9e8ea;
+      --bg-card: #f0fdfa;
+      --bg-nav: #8fd3f4;
+      --bg-btn: #0284c7;
+      --text-main: #134e4a;
+      --text-btn: #fff;
+      --border-color: #1e3a8a;
+    }
+    body.theme-yelloworange {
+      --bg-body: #fef9c3;
+      --bg-container: #fde047;
+      --bg-card: #fffbeb;
+      --bg-nav: #fcd34d;
+      --bg-btn: #f97316;
+      --text-main: #78350f;
+      --text-btn: #fff;
+      --border-color: #7c2d12;
+    }
+    body.theme-rainbow {
+      --bg-body: #fce7f3;
+      --bg-container: linear-gradient(135deg, #fecaca, #fef08a, #bbf7d0, #bfdbfe);
+      --bg-card: #fff;
+      --bg-nav: #e9d5ff;
+      --bg-btn: #8b5cf6;
+      --text-main: #3b0764;
+      --text-btn: #fff;
+      --border-color: #4c1d95;
+    }
+    body.theme-bw {
+      --bg-body: #f4f4f5;
+      --bg-container: #fff;
+      --bg-card: #fafafa;
+      --bg-nav: #e4e4e7;
+      --bg-btn: #18181b;
+      --text-main: #09090b;
+      --text-btn: #fff;
+      --border-color: #18181b;
+    }
+    body {
+      margin: 0;
+      padding: 20px;
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+    }
+    #app-container {
+      width: 100%;
+      max-width: 950px;
+      background: var(--bg-container);
+      border: 2px solid var(--border-color);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 6px 0 var(--border-color);
+    }
+    .top-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .user-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg-card);
+      border: 2px solid var(--border-color);
+      padding: 6px 14px;
+      border-radius: 20px;
+      box-shadow: 0 2px 0 var(--border-color);
+    }
+    .user-badge-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid var(--border-color);
+      background: #ccc;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .user-badge-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .user-badge-name {
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .navbar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .nav-tab {
+      flex: 1;
+      padding: 12px 6px;
+      text-align: center;
+      background: var(--bg-nav);
+      color: var(--text-main);
+      border: 2px solid var(--border-color);
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      user-select: none;
+    }
+    .nav-tab.active {
+      background: var(--bg-btn);
+      color: var(--text-btn);
+    }
+    .card {
+      background: var(--bg-card);
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 15px;
+      position: relative;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      margin-top: 6px;
+      margin-bottom: 12px;
+      background: #fff;
+      color: #000;
+      font-size: 14px;
+    }
+    .btn {
+      background: var(--bg-btn);
+      color: var(--text-btn);
+      border: 2px solid var(--border-color);
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-block;
+      text-align: center;
+      box-shadow: 0 3px 0 var(--border-color);
+    }
+    .btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 var(--border-color);
+    }
+    .pie-chart {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: conic-gradient(#b7e4c7 0 65%, #a2d2ff 65% 85%, #ffadad 85% 100%);
+      border: 2px solid var(--border-color);
+      margin: 10px auto;
+    }
+    .response-card {
+      border: 2px solid var(--border-color);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+    .chat-box {
+      max-height: 200px;
+      overflow-y: auto;
+      background: #fff;
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+    .chat-msg {
+      margin-bottom: 8px;
+    }
+    .profile-avatar {
+      width: 180px;
+      height: 180px;
+      border-radius: 40px;
+      border: 2px solid var(--border-color);
+      background: #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      overflow: hidden;
+    }
+    .profile-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .top-header {
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .navbar {
+      flex-wrap: wrap;
+    }
+    .nav-tab {
+      min-width: 110px;
+    }
+    .muted {
+      color: #666;
+      font-size: 13px;
+    }
+    .error-text {
+      color: #b91c1c;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .notice {
+      background: #fff7d6;
+      border: 2px dashed var(--border-color);
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+    .chip {
+      display: inline-block;
+      background: var(--bg-nav);
+      border: 1px solid var(--border-color);
+      border-radius: 999px;
+      padding: 3px 10px;
+      margin: 2px 4px 2px 0;
+      font-size: 12px;
+    }
+    .check-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 4px 12px;
+      margin: 6px 0 12px;
+      font-size: 14px;
+    }
+    .check-grid label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .check-grid input {
+      width: auto;
+      margin: 0;
+    }
+    .btn.small {
+      padding: 4px 10px;
+      font-size: 12px;
+    }
+    .btn.danger {
+      background: #ef4444;
+    }
+    .btn.plain {
+      background: var(--bg-card);
+      color: var(--text-main);
+    }
+    .clickable {
+      cursor: pointer;
+    }
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 10;
+    }
+    .modal {
+      width: 100%;
+      max-width: 400px;
+      background: var(--bg-card);
+      border: 2px solid var(--border-color);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: 0 6px 0 var(--border-color);
+    }
+    .buddy-card {
+      text-align: center;
+      padding: 26px 20px;
+    }
+    .match-score {
+      font-size: 40px;
+      font-weight: 800;
+      margin: 6px 0;
+    }
+    .swipe-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .swipe-buttons .btn {
+      font-size: 18px;
+      padding: 12px 22px;
+    }
+    @media (max-width: 700px) {
+      body {
+        padding: 8px;
+      }
+      #app-container {
+        padding: 12px;
+      }
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+      .nav-tab {
+        min-width: 30%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="app-container"></div>
+  <input type="file" id="pfpFileInput" accept="image/*" style="display:none" onchange="handlePfpUpload(event)">
+
+  <script>
+    const appState = {
+      currentTab: 'dashboard',
+      logFlowStep: 0,
+      communityStep: 'default',
+      selectedContest: '',
+      currentTheme: 'theme-pink',
+      serverOnline: true,
+      config: { googleConfigured: false, aiConfigured: false },
+      user: null,
+      error: '',
+      flash: '',
+      authMode: null,
+      editingProfile: false,
+      aiChatHistory: [],
+      aiLoading: false,
+      pfpUrl: null,
+      contestLogs: [],
+      draftLog: {},
+      viewLogId: null,
+      qow: null,
+      pastQow: [],
+      responsesData: null,
+      questions: [],
+      questionSearch: '',
+      openQuestion: null,
+      buddyCandidates: [],
+      buddyMatches: [],
+      admin: null
+    };
+
+    let CATALOG = { grades: [], topics: [], goals: [], competitions: [] };
+
+    /*
+     * Everything people type is shown through esc() so nobody can inject HTML.
+     */
+    function esc(value) {
+      return String(value ?? "").replace(/[&<>"']/g, c => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      }[c]));
+    }
+
+    function fmtDate(value) {
+      if (!value) return "";
+      const date = value.length === 10
+        ? new Date(value + "T00:00:00")
+        : new Date(value.replace(" ", "T") + "Z");
+      return isNaN(date) ? value : date.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+    }
+
+    const competitionName = id => CATALOG.competitions.find(c => c.id === id)?.name || id;
+    const topicInfo = id => CATALOG.topics.find(t => t.id === id);
+
+    async function api(path, body, method) {
+      const options = { method: method || (body ? "POST" : "GET"), headers: {} };
+      if (body) {
+        options.headers["Content-Type"] = "application/json";
+        options.body = JSON.stringify(body);
+      }
+      const res = await fetch(path, options);
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Something went wrong. Please try again.");
+      return data;
+    }
+
+    /*
+     * Run an async action, show any error at the top, then redraw.
+     */
+    async function run(task) {
+      appState.error = "";
+      try {
+        await task();
+      } catch (err) {
+        appState.error = err.message;
+      }
+      renderApp();
+    }
+
+    function requireLogin() {
+      if (appState.user) return false;
+      appState.authMode = "login";
+      renderApp();
+      return true;
+    }
+
+    function setTheme(e) {
+      document.body.className = e;
+      appState.currentTheme = e;
+      try { localStorage.setItem("theme", e); } catch {}
+    }
+
+    function promptChangeTheme() {
+      const e = prompt("Choose a Theme (type number):\n1. Pink\n2. Blue + Green\n3. Yellow + Orange\n4. Rainbow\n5. Black & White Minimalist", "1");
+      const t = {
+        "1": "theme-pink",
+        "2": "theme-bluegreen",
+        "3": "theme-yelloworange",
+        "4": "theme-rainbow",
+        "5": "theme-bw"
+      };
+      if (e && t[e.trim()]) {
+        setTheme(t[e.trim()]);
+      }
+    }
+
+    function renderApp() {
+      document.getElementById("app-container").innerHTML = `
+        ${renderTopHeader()}
+        ${renderNavigation()}
+        ${!appState.serverOnline ? `<div class="notice">⚠️ This copy of the site can't reach its server, so nothing can be posted or saved here.</div>` : ""}
+        ${appState.error ? `<div class="notice error-text row"><span>${esc(appState.error)}</span><button class="btn small plain" onclick="appState.error=''; renderApp();">OK</button></div>` : ""}
+        ${appState.flash ? `<div class="notice row"><span>${esc(appState.flash)}</span><button class="btn small plain" onclick="appState.flash=''; renderApp();">OK</button></div>` : ""}
+        <div class="tab-content">
+          ${renderCurrentTab()}
+        </div>
+        ${appState.authMode ? renderAuthModal() : ""}
+      `;
+      const chat = document.getElementById("aiChatBox");
+      if (chat) chat.scrollTop = chat.scrollHeight;
+    }
+
+    function renderTopHeader() {
+      const avatar = appState.pfpUrl || appState.user?.avatar_url;
+      if (!appState.user) {
+        return `
+          <div class="top-header">
+            <div class="user-badge"><span class="user-badge-name">👋 Welcome!</span></div>
+            <div>
+              <button class="btn" onclick="appState.authMode='login'; renderApp();">Log in</button>
+              <button class="btn" onclick="appState.authMode='register'; renderApp();">Sign up</button>
+            </div>
+          </div>
+        `;
+      }
+      return `
+        <div class="top-header">
+          <div class="user-badge">
+            <div class="user-badge-avatar">
+              ${avatar ? `<img src="${esc(avatar)}" alt="Avatar">` : '<svg width="20" height="20" viewBox="0 0 24 24" fill="#666"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>'}
+            </div>
+            <span class="user-badge-name">👤 ${esc(appState.user.username)}</span>
+          </div>
+          <button class="btn plain" onclick="logout()">Log out</button>
+        </div>
+      `;
+    }
+
+    function renderNavigation() {
+      return `
+        <div class="navbar">
+          ${[
+            { id: "dashboard", label: "Dashboard" },
+            { id: "log", label: "Log Contests" },
+            { id: "community", label: "Community" },
+            { id: "buddies", label: "Study Buddies" },
+            { id: "about", label: "About us" },
+            { id: "settings", label: "Settings" }
+          ].map(e => `
+            <div
+              class="nav-tab ${appState.currentTab === e.id ? "active" : ""}"
+              onclick="switchTab('${e.id}')"
+            >
+              ${e.label}
+            </div>
+          `).join("")}
+        </div>
+      `;
+    }
+
+    function switchTab(e) {
+      appState.currentTab = e;
+      appState.error = "";
+      appState.flash = "";
+      if ("community" === e) {
+        appState.communityStep = "default";
+      }
+      if ("log" === e) {
+        appState.logFlowStep = 0;
+      }
+      renderApp();
+      loadTab(e);
+    }
+
+    /*
+     * Fetch the latest data for a tab from the server.
+     */
+    function loadTab(tab) {
+      if (!appState.serverOnline) return;
+      if (tab === "community") return run(loadCommunity);
+      if (tab === "buddies" && appState.user?.buddyOptIn) return run(loadBuddies);
+      if (tab === "settings" && appState.user?.isAdmin) return run(loadAdmin);
+      if ((tab === "log" || tab === "dashboard") && appState.user) return run(loadContestLogs);
+    }
+
+    function renderCurrentTab() {
+      switch (appState.currentTab) {
+        case "dashboard": return renderDashboard();
+        case "log": return renderLogContests();
+        case "community": return renderCommunity();
+        case "buddies": return renderBuddies();
+        case "about": return renderAboutUs();
+        case "settings": return renderSettings();
+        default: return renderDashboard();
+      }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | ACCOUNTS
+    |--------------------------------------------------------------------------
+    */
+
+    function renderAuthModal() {
+      const isLogin = appState.authMode === "login";
+      return `
+        <div class="modal-backdrop" onclick="if(event.target===this){appState.authMode=null; renderApp();}">
+          <div class="modal">
+            <h2 style="margin-top:0;">${isLogin ? "Log in" : "Create an account"}</h2>
+            <label>Username</label>
+            <input type="text" id="authUsername" autocomplete="username">
+            ${isLogin ? "" : `
+              <label>Email</label>
+              <input type="email" id="authEmail" autocomplete="email">
+              <p class="muted" style="margin-top:-6px;">Your username is public. Your email is never shown to anyone.</p>
+            `}
+            <label>Password ${isLogin ? "" : "(at least 8 characters)"}</label>
+            <input type="password" id="authPassword" autocomplete="${isLogin ? "current-password" : "new-password"}" onkeydown="if(event.key==='Enter') submitAuth()">
+            <div class="row">
+              <button class="btn" onclick="submitAuth()">${isLogin ? "Log in" : "Sign up"}</button>
+              <button class="btn plain" onclick="appState.authMode=null; renderApp();">Cancel</button>
+            </div>
+            ${appState.config.googleConfigured ? `<p><a class="btn plain" style="width:100%; text-decoration:none;" href="/auth/google">Continue with Google</a></p>` : ""}
+            <p class="muted">
+              ${isLogin
+                ? `New here? <a href="#" onclick="appState.authMode='register'; renderApp(); return false;">Create an account</a>`
+                : `Already have an account? <a href="#" onclick="appState.authMode='login'; renderApp(); return false;">Log in</a>`}
+            </p>
+          </div>
+        </div>
+      `;
+    }
+
+    function submitAuth() {
+      const isLogin = appState.authMode === "login";
+      const body = {
+        username: document.getElementById("authUsername").value,
+        password: document.getElementById("authPassword").value
+      };
+      if (!isLogin) body.email = document.getElementById("authEmail").value;
+      run(async () => {
+        const data = await api(isLogin ? "/api/auth/login" : "/api/auth/register", body);
+        appState.user = data.user;
+        appState.authMode = null;
+        appState.flash = isLogin ? `Welcome back, ${data.user.username}!` : "Account created! Fill out the short form on your dashboard to get started.";
+        await loadContestLogs();
+        loadTab(appState.currentTab);
+      });
+    }
+
+    function logout() {
+      run(async () => {
+        await api("/api/auth/logout", {});
+        appState.user = null;
+        appState.contestLogs = [];
+        appState.aiChatHistory = [];
+        appState.buddyCandidates = [];
+        appState.buddyMatches = [];
+        appState.admin = null;
+        appState.pfpUrl = null;
+        appState.flash = "";
+        appState.currentTab = "dashboard";
+      });
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | DASHBOARD
+    |--------------------------------------------------------------------------
+    */
+
+    function suggestCompetitions(p) {
+      const mine = CATALOG.competitions.filter(c => p.competitions.includes(c.id));
+      const highest = Math.max(0, ...mine.map(c => c.level));
+      let target = highest || 2;
+      if (p.goal === "start") target = 1;
+      if (p.goal === "qualify" || p.goal === "score") target = highest + 1;
+      return CATALOG.competitions
+        .filter(c => c.grades.includes(p.grade) && !p.competitions.includes(c.id))
+        .sort((a, b) => Math.abs(a.level - target) - Math.abs(b.level - target) || a.level - b.level)
+        .slice(0, 3);
+    }
+
+    function renderDashboard() {
+      if (!appState.user) {
+        return `
+          <div class="card" style="text-align:center; padding: 30px;">
+            <h2>Welcome to the Math Competition Hub!</h2>
+            <p>Log your contests, share advice with the community, and find study buddies who are preparing for the same competitions.</p>
+            <button class="btn" onclick="appState.authMode='register'; renderApp();">Create a free account</button>
+            <button class="btn plain" onclick="appState.authMode='login'; renderApp();">Log in</button>
+            <p class="muted" style="margin-top: 16px;">You can read the Community tab without an account.</p>
+          </div>
+        `;
+      }
+
+      const p = appState.user.profile;
+      const last = appState.contestLogs.find(l => l.correct != null || l.incorrect != null || l.unanswered != null);
+      let pie = `<p class="muted" style="text-align:center;">Log a contest with your score to see your results here.</p>`;
+      if (last) {
+        const c = last.correct || 0, u = last.unanswered || 0, i = last.incorrect || 0;
+        const total = c + u + i || 1;
+        const a = (c / total) * 100, b = ((c + u) / total) * 100;
+        pie = `
+          <p style="text-align:center; margin: 0;"><b>${esc(last.title)}</b> <span class="muted">(${esc(fmtDate(last.date))})</span></p>
+          <div class="pie-chart" style="background: conic-gradient(#b7e4c7 0 ${a}%, #a2d2ff ${a}% ${b}%, #ffadad ${b}% 100%);"></div>
+          <div style="font-size: 13px; text-align: center; margin-top: 8px;">
+            <span style="color:#ffadad">■ Incorrect (${i})</span> |
+            <span style="color:#a2d2ff">■ Unanswered (${u})</span> |
+            <span style="color:#b7e4c7">■ Correct (${c})</span>
+          </div>
+        `;
+      }
+
+      let nextSteps = `<p class="muted">Fill out the short form below and we'll suggest what to work on.</p>`;
+      if (p) {
+        const topic = topicInfo(p.topics[0]) || CATALOG.topics[0];
+        const practice = CATALOG.competitions.find(c => p.competitions.includes(c.id) && c.link) || suggestCompetitions(p)[0];
+        nextSteps = `
+          <p><b>Focus on ${esc(topic.label)}</b></p>
+          ${practice ? `<a class="btn" style="width:100%; margin-bottom: 8px; text-decoration:none;" href="${esc(practice.link)}" target="_blank" rel="noopener">Practice: past ${esc(practice.name)} problems</a>` : ""}
+          <button class="btn" style="width:100%;" onclick="switchTab('community')">Topics to Learn: ${esc(topic.learn.join(", "))}</button>
+        `;
+      }
+
+      const showForm = !p || appState.editingProfile;
+      return `
+        <div class="grid-2">
+          <div class="card">
+            <h3>My last contest:</h3>
+            ${pie}
+          </div>
+          <div class="card">
+            <h3>Suggested next steps</h3>
+            ${nextSteps}
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>My AI agent:</h3>
+          <p>💬 <i>"Hello, <b>${esc(appState.user.username)}</b>, how can I help?"</i></p>
+          ${appState.config.aiConfigured ? "" : `<p class="muted">The AI tutor hasn't been turned on for this site yet.</p>`}
+
+          <div class="chat-box" id="aiChatBox">
+            ${0 === appState.aiChatHistory.length ? "<i>No conversation yet. Ask a question below!</i>" : ""}
+            ${appState.aiChatHistory.map(e => `
+              <div class="chat-msg"><b>${esc(e.sender)}:</b> ${esc(e.text)}</div>
+            `).join("")}
+            ${appState.aiLoading ? '<div class="chat-msg"><i>AI is thinking...</i></div>' : ""}
+          </div>
+
+          <div style="display:flex; gap: 8px;">
+            <input type="text" id="aiQueryInput" placeholder='Type to ask a question (e.g. "How do I prepare for AMC 10?")' style="margin: 0;" onkeydown="if(event.key==='Enter') sendAiMessage()">
+            <button class="btn" style="white-space:nowrap;" onclick="sendAiMessage()">Send</button>
+          </div>
+        </div>
+
+        ${showForm ? renderJourneyForm(p) : `
+          <div class="grid-2">
+            <div class="card">
+              <h4>Your competitions</h4>
+              ${p.competitions.length ? p.competitions.map(id => `
+                <button class="btn" style="width:100%; margin-bottom: 6px;" onclick="startLog('${esc(id)}')">${esc(competitionName(id))}</button>
+              `).join("") : `<p class="muted">You haven't picked any competitions yet.</p>`}
+            </div>
+            <div class="card">
+              <h4>Suggested competitions</h4>
+              ${suggestCompetitions(p).map(c => `
+                <div class="response-card">
+                  <b>${esc(c.name)}</b>
+                  <p class="muted" style="margin: 4px 0;">${esc(c.about)}</p>
+                  <a href="${esc(c.link)}" target="_blank" rel="noopener">Learn more</a>
+                </div>
+              `).join("") || `<p class="muted">You're already signed up for everything we'd suggest!</p>`}
+              <button class="btn plain" onclick="appState.editingProfile=true; renderApp();">Edit my answers</button>
+            </div>
+          </div>
+        `}
+      `;
+    }
+
+    /*
+     * The short form that customizes someone's journey on the site.
+     */
+    function renderJourneyForm(p) {
+      p = p || { grade: "", country: "", region: "", competitions: [], topics: [], goal: "fun", hobbies: [] };
+      const checks = (name, items, selected) => `
+        <div class="check-grid">
+          ${items.map(item => `
+            <label><input type="checkbox" name="${name}" value="${esc(item.id)}" ${selected.includes(item.id) ? "checked" : ""}> ${esc(item.label || item.name)}</label>
+          `).join("")}
+        </div>
+      `;
+      return `
+        <div class="card">
+          <h3>Customize your journey</h3>
+          <p class="muted">Answer a few quick questions so we can suggest competitions, topics and study buddies for you.</p>
+
+          <label><b>1. What grade are you in?</b></label>
+          <select id="f_grade">
+            <option value="">Choose one...</option>
+            ${CATALOG.grades.map(g => `<option value="${g.id}" ${p.grade === g.id ? "selected" : ""}>${esc(g.label)}</option>`).join("")}
+          </select>
+
+          <label><b>2. Where are you?</b> <span class="muted">(country and state/province only, never your city or address)</span></label>
+          <div class="grid-2" style="gap: 10px;">
+            <input type="text" id="f_country" placeholder="Country, e.g. USA" value="${esc(p.country)}" maxlength="40">
+            <input type="text" id="f_region" placeholder="State or province, e.g. California" value="${esc(p.region)}" maxlength="40">
+          </div>
+
+          <label><b>3. Which competitions are you doing or interested in?</b></label>
+          ${checks("f_comp", CATALOG.competitions, p.competitions)}
+
+          <label><b>4. Which topics do you want to work on?</b></label>
+          ${checks("f_topic", CATALOG.topics, p.topics)}
+
+          <label><b>5. What's your main goal right now?</b></label>
+          <select id="f_goal">
+            ${CATALOG.goals.map(g => `<option value="${g.id}" ${p.goal === g.id ? "selected" : ""}>${esc(g.label)}</option>`).join("")}
+          </select>
+
+          <label><b>6. What do you like to do outside of math?</b> <span class="muted">(separate with commas)</span></label>
+          <input type="text" id="f_hobbies" placeholder="e.g. piano, soccer, drawing" value="${esc(p.hobbies.join(", "))}">
+
+          <button class="btn" onclick="saveProfile()">Save my answers</button>
+          ${appState.user.profile ? `<button class="btn plain" style="margin-left: 8px;" onclick="appState.editingProfile=false; renderApp();">Cancel</button>` : ""}
+        </div>
+      `;
+    }
+
+    function saveProfile() {
+      const checked = name => [...document.querySelectorAll(`input[name="${name}"]:checked`)].map(i => i.value);
+      const body = {
+        grade: document.getElementById("f_grade").value,
+        country: document.getElementById("f_country").value,
+        region: document.getElementById("f_region").value,
+        competitions: checked("f_comp"),
+        topics: checked("f_topic"),
+        goal: document.getElementById("f_goal").value,
+        hobbies: document.getElementById("f_hobbies").value.split(",")
+      };
+      run(async () => {
+        const data = await api("/api/me/profile", body, "PUT");
+        appState.user = data.user;
+        appState.editingProfile = false;
+        appState.flash = "Saved! Your suggestions are updated.";
+      });
+    }
+
+    async function sendAiMessage() {
+      const e = document.getElementById("aiQueryInput");
+      if (!e || !e.value.trim() || appState.aiLoading) return;
+
+      const t = e.value.trim();
+      const history = appState.aiChatHistory.map(m => ({ role: m.role, text: m.text }));
+      appState.aiChatHistory.push({ role: "user", sender: appState.user.username, text: t });
+      appState.aiLoading = true;
+      renderApp();
+
+      try {
+        const data = await api("/api/ai/chat", { message: t, history });
+        appState.aiChatHistory.push({ role: "assistant", sender: "AI tutor", text: data.reply });
+      } catch (err) {
+        appState.aiChatHistory.push({ role: "error", sender: "AI tutor", text: err.message });
+      } finally {
+        appState.aiLoading = false;
+        renderApp();
+      }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | LOG CONTESTS
+    |--------------------------------------------------------------------------
+    */
+
+    async function loadContestLogs() {
+      if (!appState.user) return;
+      appState.contestLogs = (await api("/api/contest-logs")).logs;
+    }
+
+    function startLog(competitionId) {
+      appState.currentTab = "log";
+      appState.logFlowStep = 0;
+      renderApp();
+      const input = document.getElementById("contestSearch");
+      input.value = competitionName(competitionId) + " ";
+      input.focus();
+    }
+
+    function beginContestLog() {
+      if (requireLogin()) return;
+      const name = document.getElementById("contestSearch").value.trim();
+      if (!name) {
+        appState.error = "Type the name of the contest you took, e.g. AMC 10A 2016.";
+        return renderApp();
+      }
+      appState.selectedContest = name;
+      appState.draftLog = {};
+      appState.logFlowStep = 1;
+      appState.error = "";
+      renderApp();
+    }
+
+    function saveLogStep(fields, nextStep) {
+      for (const field of fields) {
+        appState.draftLog[field] = document.getElementById("log_" + field).value;
+      }
+      appState.logFlowStep = nextStep;
+      renderApp();
+    }
+
+    function renderLogContests() {
+      if (!appState.user) {
+        return `
+          <div class="card" style="text-align:center;">
+            <h3>Log your contests</h3>
+            <p>Keep track of every contest you take, how it went, and what you learned. Your logs are private to you.</p>
+            <button class="btn" onclick="appState.authMode='login'; renderApp();">Log in to start</button>
+          </div>
+        `;
+      }
+      if ("history" === appState.logFlowStep) {
+        const open = appState.contestLogs.find(l => l.id === appState.viewLogId);
+        return `
+          <div class="card">
+            <h2 style="text-align: center;">Your contest logs</h2>
+            ${appState.contestLogs.length ? "" : `<p class="muted" style="text-align:center;">No logs yet.</p>`}
+            ${appState.contestLogs.map(e => `
+              <div class="card">
+                <div class="row">
+                  <span style="font-weight: bold; font-size: 16px;">${esc(e.title)} (Completed ${esc(fmtDate(e.date))})</span>
+                  <button class="btn" onclick="appState.viewLogId=${open && open.id === e.id ? "null" : e.id}; renderApp();">${open && open.id === e.id ? "Hide" : "View"}</button>
+                </div>
+                ${open && open.id === e.id ? `
+                  <p><b>${esc(e.mode)} test.</b> Correct: ${e.correct ?? "-"}, Incorrect: ${e.incorrect ?? "-"}, Unanswered: ${e.unanswered ?? "-"}</p>
+                  ${[["went", "How it went"], ["proud", "What I was proud of"], ["better", "What could have gone better"], ["learned", "What I learned"]]
+                    .filter(([k]) => e.reflections[k])
+                    .map(([k, label]) => `<p><b>${label}:</b> ${esc(e.reflections[k])}</p>`).join("")}
+                ` : ""}
+              </div>
+            `).join("")}
+            <div style="text-align: right; margin-top: 20px;">
+              <button class="btn" onclick="appState.logFlowStep=0; renderApp();">Add new log</button>
+            </div>
+          </div>
+        `;
+      }
+      if (0 === appState.logFlowStep) {
+        const mine = appState.user.profile?.competitions || [];
+        return `
+          <div class="grid-2">
+            <div class="card">
+              <h3>Log a contest</h3>
+              <label>Which contest did you take?</label>
+              <input type="text" id="contestSearch" list="contestNames" placeholder="e.g. AMC 10A 2016" value="${esc(appState.selectedContest)}" onkeydown="if(event.key==='Enter') beginContestLog()">
+              <datalist id="contestNames">
+                ${CATALOG.competitions.map(c => `<option value="${esc(c.name)}">`).join("")}
+              </datalist>
+              <button class="btn" onclick="beginContestLog()">Start log</button>
+              <br><br>
+              <button class="btn" onclick="appState.logFlowStep='history'; renderApp();">View past contest logs (${appState.contestLogs.length})</button>
+            </div>
+            <div class="card">
+              <h3>Suggested for you:</h3>
+              ${mine.length ? `
+                <div style="display:flex; flex-direction:column; gap:8px;">
+                  ${mine.map(id => `<button class="btn" onclick="startLog('${esc(id)}')">Log a ${esc(competitionName(id))} contest</button>`).join("")}
+                </div>
+                <p class="muted">Add the year and version (like "2016" or "10A") before you start.</p>
+              ` : `<p class="muted">Pick your competitions in the form on your dashboard and they'll show up here.</p>`}
+            </div>
+          </div>
+        `;
+      }
+      const d = appState.draftLog;
+      if (1 === appState.logFlowStep) {
+        return `
+          <div class="card">
+            <h2>${esc(appState.selectedContest)} Log</h2>
+            <div class="card">
+              <h3>Testing conditions</h3>
+              <label>Date completed:</label>
+              <input type="date" id="log_date" value="${esc(d.date || new Date().toISOString().slice(0, 10))}">
+              <label>Mock/Real test:</label>
+              <select id="log_mode"><option>Mock</option><option ${d.mode === "Real" ? "selected" : ""}>Real</option></select>
+            </div>
+            <div class="card">
+              <h3>Score</h3>
+              <label>Correct answers:</label><input type="number" min="0" id="log_correct" value="${esc(d.correct)}">
+              <label>Incorrect answers:</label><input type="number" min="0" id="log_incorrect" value="${esc(d.incorrect)}">
+              <label>Unanswered questions:</label><input type="number" min="0" id="log_unanswered" value="${esc(d.unanswered)}">
+            </div>
+            <button class="btn" onclick="saveLogStep(['date','mode','correct','incorrect','unanswered'], 2)">Next</button>
+          </div>
+        `;
+      }
+      if (2 === appState.logFlowStep) {
+        return `
+          <div class="card">
+            <h2>${esc(appState.selectedContest)} Log</h2>
+            <div class="card">
+              <h3>How did you think this test went?</h3>
+              <textarea rows="3" id="log_went" placeholder="Answer:">${esc(d.went)}</textarea>
+            </div>
+            <div class="card">
+              <h3>What were you proud of in this test?</h3>
+              <textarea rows="3" id="log_proud" placeholder="Answer:">${esc(d.proud)}</textarea>
+            </div>
+            <button class="btn plain" onclick="saveLogStep(['went','proud'], 1)">Back</button>
+            <button class="btn" onclick="saveLogStep(['went','proud'], 3)">Next</button>
+          </div>
+        `;
+      }
+      if (3 === appState.logFlowStep) {
+        return `
+          <div class="card">
+            <h2>${esc(appState.selectedContest)} Log</h2>
+            <div class="card">
+              <h3>What was something that you wish could have gone better?</h3>
+              <textarea rows="3" id="log_better" placeholder="Answer:">${esc(d.better)}</textarea>
+            </div>
+            <div class="card">
+              <h3>What concepts or test-taking strategies did you learn from this test?</h3>
+              <textarea rows="3" id="log_learned" placeholder="Answer:">${esc(d.learned)}</textarea>
+            </div>
+            <button class="btn plain" onclick="saveLogStep(['better','learned'], 2)">Back</button>
+            <button class="btn" onclick="completeContestLogging()">Submit</button>
+          </div>
+        `;
+      }
+      if (4 === appState.logFlowStep) {
+        return `
+          <div class="card" style="text-align: center; padding: 40px;">
+            <div style="font-size: 50px;">🎉 🎊</div>
+            <h2>Your contest: "${esc(appState.selectedContest)}" Logged successfully!</h2>
+            <br>
+            <button class="btn" onclick="appState.selectedContest=''; switchTab('dashboard');">Back to Home</button>
+          </div>
+        `;
+      }
+    }
+
+    function completeContestLogging() {
+      for (const field of ["better", "learned"]) {
+        appState.draftLog[field] = document.getElementById("log_" + field).value;
+      }
+      const d = appState.draftLog;
+      run(async () => {
+        await api("/api/contest-logs", {
+          title: appState.selectedContest,
+          date: d.date,
+          mode: d.mode,
+          correct: d.correct,
+          incorrect: d.incorrect,
+          unanswered: d.unanswered,
+          reflections: { went: d.went, proud: d.proud, better: d.better, learned: d.learned }
+        });
+        await loadContestLogs();
+        appState.logFlowStep = 4;
+      });
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | COMMUNITY
+    |--------------------------------------------------------------------------
+    */
+
+    async function loadCommunity() {
+      const [qow, questions] = await Promise.all([
+        api("/api/community/qow"),
+        api("/api/community/questions?q=" + encodeURIComponent(appState.questionSearch))
+      ]);
+      appState.qow = qow.current;
+      appState.pastQow = qow.past;
+      appState.questions = questions.questions;
+    }
+
+    /*
+     * Reload whatever community page is open (after posting or liking).
+     */
+    async function refreshCommunity() {
+      if (appState.communityStep === "responses" && appState.responsesData) {
+        appState.responsesData = await api(`/api/community/qow/${appState.responsesData.qow.id}/responses`);
+      } else if (appState.communityStep === "question" && appState.openQuestion) {
+        appState.openQuestion = await api(`/api/community/questions/${appState.openQuestion.question.id}`);
+      } else {
+        await loadCommunity();
+      }
+    }
+
+    function showCommunity(step) {
+      if ((step === "post" || step === "suggest_qow" || step === "ask") && requireLogin()) return;
+      appState.communityStep = step;
+      renderApp();
+    }
+
+    function openResponses(qowId) {
+      run(async () => {
+        appState.responsesData = await api(`/api/community/qow/${qowId}/responses`);
+        appState.communityStep = "responses";
+      });
+    }
+
+    function openQuestion(id) {
+      run(async () => {
+        appState.openQuestion = await api(`/api/community/questions/${id}`);
+        appState.communityStep = "question";
+      });
+    }
+
+    function searchQuestions() {
+      appState.questionSearch = document.getElementById("questionSearch").value.trim();
+      run(loadCommunity);
+    }
+
+    function likeItem(type, id) {
+      if (requireLogin()) return;
+      run(async () => {
+        await api("/api/likes", { type, id });
+        await refreshCommunity();
+      });
+    }
+
+    function reportItem(type, id, author) {
+      if (requireLogin()) return;
+      const reason = prompt(`Why are you reporting ${author}'s post?`);
+      if (!reason || !reason.trim()) return;
+      run(async () => {
+        await api("/api/reports", { type, id, reason });
+        appState.flash = "Thanks for reporting. The site team will review it.";
+      });
+    }
+
+    function postButtons(type, item) {
+      return `
+        <div class="row" style="margin-top: 8px;">
+          <button class="btn small" onclick="likeItem('${type}', ${item.id})">${item.liked ? "❤️ Liked" : "🤍 Like"} (${item.likes})</button>
+          <button class="btn small danger" onclick="reportItem('${type}', ${item.id}, '${esc(item.author).replace(/&#39;/g, "\\&#39;")}')">Report</button>
+        </div>
+      `;
+    }
+
+    function renderCommunity() {
+      const q = appState.qow;
+      const e = `
+        <div>
+          <div class="card clickable" onclick="${q ? `openResponses(${q.id})` : ""}">
+            <h4>Question of the Week: ${q ? esc(q.text) : "Loading..."}</h4>
+            ${q ? `<p class="muted" style="margin: 4px 0 0 0;">Posted ${esc(fmtDate(q.created_at))}</p>` : ""}
+            <p style="color:#888; font-size:13px; margin-top:8px; text-align:center;">Click to see responses</p>
+          </div>
+          <div class="card clickable" style="text-align: center;" onclick="showCommunity('post')">
+            <h3>Post response</h3>
+          </div>
+          <div class="card clickable" style="text-align: center;" onclick="showCommunity('past_qow')">
+            <h3>Past Question of the Weeks</h3>
+          </div>
+          <div class="card clickable" style="text-align: center;" onclick="showCommunity('suggest_qow')">
+            <h3>Suggest a question</h3>
+          </div>
+          <div class="card clickable" style="text-align: center;" onclick="showCommunity('default')">
+            <h3>Community Advice</h3>
+          </div>
+        </div>
+      `;
+
+      const layout = left => `<div class="grid-2"><div>${left}</div>${e}</div>`;
+
+      if ("past_qow" === appState.communityStep) {
+        return layout(`
+          <div class="card">
+            <h3 style="text-align:center; margin-bottom: 2px;">Past Question of the Weeks</h3>
+            <p style="text-align:center; color:#888; font-size:12px; margin-top:0;">Click to see responses</p>
+            ${appState.pastQow.length ? "" : `<p class="muted" style="text-align:center;">No past questions yet. This is the first week!</p>`}
+            ${appState.pastQow.map(p => `
+              <div class="card clickable" onclick="openResponses(${p.id})">
+                <h4>Question of the Week: ${esc(p.text)}</h4>
+                <p style="color:#888; font-size:12px;">See responses</p>
+                <div style="text-align:right; color:red; font-weight:bold; font-size:13px;">${esc(fmtDate(p.created_at))}</div>
+              </div>
+            `).join("")}
+          </div>
+        `);
+      }
+      if ("suggest_qow" === appState.communityStep) {
+        return layout(`
+          <div class="card" style="min-height: 380px; display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <h3 style="text-align:center; margin-bottom:2px;">Suggest a question</h3>
+              <p style="text-align:center; color:#888; font-size:12px; margin-top:0;">The site team picks a new Question of the Week from these suggestions.</p>
+              <textarea id="suggestText" rows="5" maxlength="500" placeholder="Click to add text" style="margin-top:20px;"></textarea>
+            </div>
+            <div style="text-align: right;">
+              <button class="btn" onclick="submitSuggestion()">+ Submit Question</button>
+            </div>
+          </div>
+        `);
+      }
+      if ("post" === appState.communityStep) {
+        return layout(`
+          <div class="card">
+            <h2>Post a Response</h2>
+            <div class="card">
+              <h4>Question of the Week:</h4>
+              <p><b>${q ? esc(q.text) : ""}</b></p>
+            </div>
+            <div class="card">
+              <label><b>Your Response:</b></label>
+              <textarea id="communityResponseText" rows="5" maxlength="3000" placeholder="Type your response here..."></textarea>
+              <p class="muted">Your response is public and shows your username.</p>
+            </div>
+            <button class="btn" onclick="submitCommunityResponse()">Submit Response</button>
+            <button class="btn" style="margin-left: 8px;" onclick="showCommunity('default')">Cancel</button>
+          </div>
+        `);
+      }
+      if ("ask" === appState.communityStep) {
+        return layout(`
+          <div class="card">
+            <h2>Ask the community</h2>
+            <label><b>Your question:</b></label>
+            <input type="text" id="askTitle" maxlength="200" placeholder="e.g. How do I get faster at AMC 8?">
+            <label><b>More details (optional):</b></label>
+            <textarea id="askBody" rows="5" maxlength="3000"></textarea>
+            <button class="btn" onclick="submitQuestion()">Post question</button>
+            <button class="btn" style="margin-left: 8px;" onclick="showCommunity('default')">Cancel</button>
+          </div>
+        `);
+      }
+      if ("question" === appState.communityStep && appState.openQuestion) {
+        const { question, replies } = appState.openQuestion;
+        return layout(`
+          <div class="card">
+            <button class="btn small plain" onclick="showCommunity('default')">← All questions</button>
+            <h3>${esc(question.title)}</h3>
+            ${question.body ? `<p>${esc(question.body)}</p>` : ""}
+            <p class="muted" style="margin:0;">Asked by ${esc(question.author)} on ${esc(fmtDate(question.created_at))}</p>
+            ${postButtons("question", question)}
+          </div>
+          <div class="card">
+            <h3>${replies.length} ${replies.length === 1 ? "reply" : "replies"}</h3>
+            ${replies.map(r => `
+              <div class="response-card">
+                <b>${esc(r.author)}</b> <small class="muted">${esc(fmtDate(r.created_at))}</small>
+                <p>${esc(r.text)}</p>
+                ${postButtons("reply", r)}
+              </div>
+            `).join("")}
+            <label><b>Write a reply:</b></label>
+            <textarea id="replyText" rows="3" maxlength="3000" placeholder="${appState.user ? "Share your advice..." : "Log in to reply"}"></textarea>
+            <button class="btn" onclick="submitReply(${question.id})">Post reply</button>
+          </div>
+        `);
+      }
+      if ("responses" === appState.communityStep && appState.responsesData) {
+        const { qow, responses } = appState.responsesData;
+        return layout(`
+          <div class="card">
+            <h3>Community Responses</h3>
+            <p><b>${esc(qow.text)}</b></p>
+            ${q && q.id === qow.id ? `<button class="btn" style="margin-bottom: 12px;" onclick="showCommunity('post')">+ Post your response</button>` : ""}
+            ${responses.length ? "" : `<p class="muted">No responses yet. Be the first!</p>`}
+            ${responses.map(r => `
+              <div class="response-card">
+                <b>${esc(r.author)}'s response:</b>
+                <p>${esc(r.text)}</p>
+                <small>Date: ${esc(fmtDate(r.created_at))}</small>
+                ${postButtons("qow_response", r)}
+              </div>
+            `).join("")}
+          </div>
+        `);
+      }
+      return layout(`
+        <div class="card">
+          <h3 style="text-align:center; margin-bottom: 2px;">Community Advice</h3>
+          <p style="text-align:center; color:#888; font-size:12px; margin-top:0;">Click a question to read and reply</p>
+
+          <div style="display:flex; gap: 8px; align-items:center;">
+            <input type="text" id="questionSearch" placeholder="🔍 Search questions" value="${esc(appState.questionSearch)}" style="margin:0;" onkeydown="if(event.key==='Enter') searchQuestions()">
+            <button class="btn" onclick="searchQuestions()">Search</button>
+          </div>
+          <br>
+
+          ${appState.questions.length ? "" : `<p class="muted" style="text-align:center;">${appState.questionSearch ? "No questions match your search." : "No questions yet. Ask the first one!"}</p>`}
+          ${appState.questions.map(item => `
+            <div class="card clickable" onclick="openQuestion(${item.id})">
+              <h4>${esc(item.title)}</h4>
+              <p style="color:#888; font-size:12px; margin:0;">Asked by ${esc(item.author)} on ${esc(fmtDate(item.created_at))}</p>
+              <p style="color:#888; font-size:12px; margin:0;">${item.replies} ${item.replies === 1 ? "reply" : "replies"} · ${item.likes} ❤️</p>
+            </div>
+          `).join("")}
+
+          <div style="text-align: right; margin-top: 15px;">
+            <button class="btn" onclick="showCommunity('ask')">+ Ask a question</button>
+          </div>
+        </div>
+      `);
+    }
+
+    function submitCommunityResponse() {
+      const text = document.getElementById("communityResponseText").value;
+      run(async () => {
+        await api(`/api/community/qow/${appState.qow.id}/responses`, { text });
+        appState.responsesData = await api(`/api/community/qow/${appState.qow.id}/responses`);
+        appState.communityStep = "responses";
+      });
+    }
+
+    function submitSuggestion() {
+      const text = document.getElementById("suggestText").value;
+      run(async () => {
+        await api("/api/community/suggestions", { text });
+        appState.flash = "Question submitted! Thanks for the idea.";
+        appState.communityStep = "default";
+      });
+    }
+
+    function submitQuestion() {
+      const title = document.getElementById("askTitle").value;
+      const body = document.getElementById("askBody").value;
+      run(async () => {
+        const { id } = await api("/api/community/questions", { title, body });
+        appState.openQuestion = await api(`/api/community/questions/${id}`);
+        appState.communityStep = "question";
+      });
+    }
+
+    function submitReply(questionId) {
+      if (requireLogin()) return;
+      const text = document.getElementById("replyText").value;
+      run(async () => {
+        await api(`/api/community/questions/${questionId}/replies`, { text });
+        appState.openQuestion = await api(`/api/community/questions/${questionId}`);
+      });
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | STUDY BUDDIES
+    |--------------------------------------------------------------------------
+    */
+
+    async function loadBuddies() {
+      const [candidates, matches] = await Promise.all([
+        api("/api/buddy/candidates"),
+        api("/api/buddy/matches")
+      ]);
+      appState.buddyCandidates = candidates.candidates;
+      appState.buddyMatches = matches.matches;
+    }
+
+    function saveBuddySettings(optIn) {
+      const introBox = document.getElementById("buddyIntro");
+      const intro = introBox ? introBox.value : appState.user.buddyIntro;
+      if (optIn && !appState.user.buddyOptIn && !document.getElementById("buddyAgree").checked) {
+        appState.error = "Please read and agree to the safety rules first.";
+        return renderApp();
+      }
+      run(async () => {
+        appState.user = (await api("/api/buddy/settings", { optIn, intro }, "PUT")).user;
+        appState.flash = optIn ? "Your Study Buddy profile is saved." : "Study Buddies is paused. Nobody new will see you.";
+        if (optIn) await loadBuddies();
+      });
+    }
+
+    function swipe(liked) {
+      const person = appState.buddyCandidates[0];
+      if (!person) return;
+      run(async () => {
+        const { matched } = await api("/api/buddy/swipe", { targetId: person.id, liked });
+        if (matched) appState.flash = `🎉 It's a match! You and ${person.username} both want to study together.`;
+        await loadBuddies();
+      });
+    }
+
+    function blockBuddy(id, username) {
+      if (!confirm(`Block ${username}? You won't see each other in Study Buddies again.`)) return;
+      run(async () => {
+        await api("/api/buddy/block", { targetId: id });
+        await loadBuddies();
+      });
+    }
+
+    function reportBuddy(id, username) {
+      const reason = prompt(`Why are you reporting ${username}?`);
+      if (!reason || !reason.trim()) return;
+      run(async () => {
+        await api("/api/reports", { type: "user", id, reason });
+        await api("/api/buddy/block", { targetId: id });
+        appState.flash = `Thanks for reporting. ${username} has also been blocked for you.`;
+        await loadBuddies();
+      });
+    }
+
+    const buddyPlace = b => [b.region, b.country].filter(Boolean).map(esc).join(", ");
+
+    function renderBuddyRules() {
+      return `
+        <ul style="font-size: 14px; padding-left: 20px;">
+          <li>You'll only be shown to people in the <b>same school level</b> as you.</li>
+          <li>We only show your <b>username, country and state</b>, never your city, school or email.</li>
+          <li><b>Never share</b> your address, phone number, school, or social media in your intro.</li>
+          <li>Only meet someone in person with a <b>parent or guardian's OK</b>, in a public place.</li>
+          <li>If anyone makes you uncomfortable, use <b>Block</b> or <b>Report</b>.</li>
+        </ul>
+      `;
+    }
+
+    function renderBuddies() {
+      const user = appState.user;
+      if (!user) {
+        return `
+          <div class="card" style="text-align:center;">
+            <h2>💞 Study Buddies</h2>
+            <p>Get matched with people who live near you, are preparing for the same competitions, and share your hobbies.</p>
+            <button class="btn" onclick="appState.authMode='login'; renderApp();">Log in to find buddies</button>
+          </div>
+        `;
+      }
+      if (!user.profile) {
+        return `
+          <div class="card" style="text-align:center;">
+            <h2>💞 Study Buddies</h2>
+            <p>First, fill out the short "Customize your journey" form so we know your location, competitions and hobbies.</p>
+            <button class="btn" onclick="switchTab('dashboard')">Go to the form</button>
+          </div>
+        `;
+      }
+      if (!user.buddyOptIn) {
+        return `
+          <div class="card">
+            <h2>💞 Study Buddies</h2>
+            <p>Like a matching app, but for math! We'll show you one person at a time, ranked by how much you have in common:
+              <b>where you live</b>, <b>which competitions</b> you're doing, and <b>your hobbies</b>.
+              Pick <b>♥ Connect</b> or <b>✕ Pass</b>. If you both pick Connect, it's a match!</p>
+            <h3>Safety rules</h3>
+            ${renderBuddyRules()}
+            <label><b>A short intro about you</b> <span class="muted">(shown to people you might match with)</span></label>
+            <textarea id="buddyIntro" rows="3" maxlength="300" placeholder="e.g. Practicing for AMC 10, love geometry and drawing. Looking for someone to do weekly mocks with!">${esc(user.buddyIntro)}</textarea>
+            <label style="display:flex; gap:8px; align-items:center;"><input type="checkbox" id="buddyAgree" style="width:auto; margin:0;"> I've read the safety rules and agree to follow them.</label>
+            <br>
+            <button class="btn" onclick="saveBuddySettings(true)">Turn on Study Buddies</button>
+          </div>
+        `;
+      }
+
+      const next = appState.buddyCandidates[0];
+      return `
+        <div class="grid-2">
+          <div>
+            ${next ? `
+              <div class="card buddy-card">
+                <p class="muted" style="margin:0;">Suggested buddy · ${appState.buddyCandidates.length} waiting</p>
+                <h2 style="margin: 8px 0 0;">${esc(next.username)}</h2>
+                ${buddyPlace(next) ? `<p style="margin: 4px 0;">📍 ${buddyPlace(next)}</p>` : ""}
+                <div class="match-score">${next.score}% match</div>
+                <div>${next.reasons.map(r => `<span class="chip">✨ ${esc(r)}</span>`).join("")}</div>
+                ${next.intro ? `<p><i>"${esc(next.intro)}"</i></p>` : ""}
+                ${next.competitions.length ? `<p style="margin-bottom:2px;"><b>Competitions:</b></p><div>${next.competitions.map(c => `<span class="chip">${esc(c)}</span>`).join("")}</div>` : ""}
+                ${next.hobbies.length ? `<p style="margin-bottom:2px;"><b>Hobbies:</b></p><div>${next.hobbies.map(h => `<span class="chip">${esc(h)}</span>`).join("")}</div>` : ""}
+                <div class="swipe-buttons">
+                  <button class="btn plain" onclick="swipe(false)">✕ Pass</button>
+                  <button class="btn" onclick="swipe(true)">♥ Connect</button>
+                </div>
+                <p style="margin-top: 14px;"><a href="#" class="muted" onclick="reportBuddy(${next.id}, '${esc(next.username)}'); return false;">Report this profile</a></p>
+              </div>
+            ` : `
+              <div class="card buddy-card">
+                <h3>No more suggestions right now</h3>
+                <p class="muted">You've seen everyone at your school level for now. Check back as more people join!</p>
+              </div>
+            `}
+          </div>
+          <div>
+            <div class="card">
+              <h3>Your matches (${appState.buddyMatches.length})</h3>
+              ${appState.buddyMatches.length ? "" : `<p class="muted">When you and someone else both pick Connect, they'll show up here.</p>`}
+              ${appState.buddyMatches.map(m => `
+                <div class="response-card">
+                  <div class="row"><b>${esc(m.username)}</b><span class="chip">${m.score}% match</span></div>
+                  ${buddyPlace(m) ? `<small>📍 ${buddyPlace(m)}</small>` : ""}
+                  ${m.intro ? `<p style="margin: 6px 0;"><i>"${esc(m.intro)}"</i></p>` : ""}
+                  <div>${m.reasons.map(r => `<span class="chip">${esc(r)}</span>`).join("")}</div>
+                  <div class="row" style="margin-top: 8px;">
+                    <button class="btn small plain" onclick="blockBuddy(${m.id}, '${esc(m.username)}')">Block</button>
+                    <button class="btn small danger" onclick="reportBuddy(${m.id}, '${esc(m.username)}')">Report</button>
+                  </div>
+                </div>
+              `).join("")}
+              ${appState.buddyMatches.length ? `<p class="muted">Say hi by replying to their posts in the Community tab. Remember: don't share personal contact info.</p>` : ""}
+            </div>
+            <div class="card">
+              <h3>My buddy profile</h3>
+              <label>Intro</label>
+              <textarea id="buddyIntro" rows="3" maxlength="300">${esc(user.buddyIntro)}</textarea>
+              <button class="btn small" onclick="saveBuddySettings(true)">Save intro</button>
+              <button class="btn small plain" onclick="saveBuddySettings(false)">Pause Study Buddies</button>
+              <p class="muted">To change your location, competitions or hobbies, edit your answers on the Dashboard.</p>
+              <details><summary class="muted">Safety rules</summary>${renderBuddyRules()}</details>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | ABOUT + SETTINGS
+    |--------------------------------------------------------------------------
+    */
+
+    function renderAboutUs() {
+      return `
+        <div class="grid-2">
+          <div class="card">
+            <h3>Elaine Zhou</h3>
+            <p><b>Where this website idea came from: </b> I started competition math in 5th grade, but often focused only on my score instead of what I actually learned. Over time, I realized that constant comparison was becoming unhealthy, and I realized that math is so much more than what you get on one test on one day. I hope this website can provide those who are stressed with support, help people learn math without always focusing on getting something right or wrong, and foster a fun and welcoming community!</p>
+          </div>
+          <div class="card">
+            <h3>Catherine Pennington</h3>
+            <p><b>Why I wanted to build this website:</b> Through competition math, not only was I able to get better at math, but I was also able to build my own work ethic, make friends, and discover how fun it is to think! Through this website, I want to expand access to competition math -- but not just through problems. Math is so much more fun when you have a community to cheer you on and help you when you need help -- and I hope this website can provide that community!</p>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Sarah Li</h3>
+          <p><b>What this website means to me:</b> When I started to learn more about competition math, I wanted to improve, but I didn't know when to start, and what was enough. I also got into this field relatively late (in 7th grade), and often got lost and didn't know what to do. I believe many students out there share the same struggles as I had, so in co-creating this website, I hope to foster a community that guides people of all age ranges and skill levels in an environment free of comparison and self-denial.</p>
+        </div>
+      `;
+    }
+
+    function changeDisplayName() {
+      const name = prompt("Enter new display name (letters, numbers, underscores):", appState.user.username);
+      if (!name || name === appState.user.username) return;
+      run(async () => {
+        appState.user = (await api("/api/me", { username: name }, "PATCH")).user;
+      });
+    }
+
+    async function loadAdmin() {
+      appState.admin = await api("/api/admin/overview");
+    }
+
+    function setQow(suggestionId, text) {
+      text = text ?? document.getElementById("adminQow").value;
+      if (!text.trim() || !confirm(`Make this the new Question of the Week?\n\n${text}`)) return;
+      run(async () => {
+        await api("/api/admin/qow", { text, suggestionId });
+        appState.flash = "New Question of the Week is live!";
+        await loadAdmin();
+      });
+    }
+
+    function adminHide(type, id) {
+      run(async () => {
+        await api("/api/admin/hide", { type, id });
+        await loadAdmin();
+      });
+    }
+
+    function adminResolve(id) {
+      run(async () => {
+        await api(`/api/admin/reports/${id}/resolve`, {});
+        await loadAdmin();
+      });
+    }
+
+    function renderAdmin() {
+      const a = appState.admin;
+      if (!a) return `<div class="card"><h3>Admin</h3><p class="muted">Loading...</p></div>`;
+      return `
+        <div class="card">
+          <h3>🛠 Admin: Question of the Week</h3>
+          <textarea id="adminQow" rows="2" maxlength="500" placeholder="Write a new Question of the Week"></textarea>
+          <button class="btn" onclick="setQow(null)">Post new question</button>
+          <h4>Suggestions from the community (${a.suggestions.length})</h4>
+          ${a.suggestions.map((s, i) => `
+            <div class="response-card row">
+              <span>${esc(s.text)} <small class="muted">by ${esc(s.author)}</small></span>
+              <button class="btn small" onclick="setQow(${s.id}, appState.admin.suggestions[${i}].text)">Use this</button>
+            </div>
+          `).join("") || `<p class="muted">No suggestions yet.</p>`}
+        </div>
+        <div class="card">
+          <h3>🚩 Admin: Reports (${a.reports.length})</h3>
+          ${a.reports.map(r => `
+            <div class="response-card">
+              <p style="margin-top:0;">${esc(r.content)}</p>
+              <small><b>Reason:</b> ${esc(r.reason)} · reported by ${esc(r.reporter)} on ${esc(fmtDate(r.created_at))}</small>
+              <div class="row" style="margin-top: 8px;">
+                <button class="btn small danger" onclick="adminHide('${esc(r.target_type)}', ${r.target_id})">${r.target_type === "user" ? "Remove from Study Buddies" : "Hide post"}</button>
+                <button class="btn small plain" onclick="adminResolve(${r.id})">Dismiss</button>
+              </div>
+            </div>
+          `).join("") || `<p class="muted">No open reports. 🎉</p>`}
+        </div>
+      `;
+    }
+
+    function renderSettings() {
+      if (!appState.user) {
+        return `
+          <div class="card">
+            <h3>Settings</h3>
+            <button class="btn" onclick="promptChangeTheme()">Change display color (the only option is pink)</button>
+            <p class="muted">Log in to change your display name and profile.</p>
+          </div>
+        `;
+      }
+      const avatar = appState.pfpUrl || appState.user.avatar_url;
+      return `
+        <div class="card" style="padding: 30px;">
+          <div style="display:flex; gap: 30px; align-items:center; flex-wrap: wrap;">
+            <div class="profile-avatar" onclick="triggerPfpUpload()">
+              ${avatar ? `<img src="${esc(avatar)}" alt="Profile Picture">` : '<svg width="120" height="120" viewBox="0 0 24 24" fill="#ffffff"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>'}
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap: 15px; flex-grow: 1;">
+              <button class="btn" style="width:100%; text-align:center;" onclick="changeDisplayName()">
+                Change display name
+              </button>
+              <button class="btn" style="width:100%; text-align:center;" onclick="promptChangeTheme()">
+                Change display color (the only option is pink)
+              </button>
+              <button class="btn" style="width:100%; text-align:center;" onclick="appState.editingProfile=true; switchTab('dashboard');">
+                Edit my journey answers
+              </button>
+            </div>
+          </div>
+
+          <div style="margin-top: 25px;">
+            <button class="btn" style="width: auto;" onclick="triggerPfpUpload()">Select Profile Picture from Device</button>
+            <p class="muted">Your profile picture only shows on this device.</p>
+          </div>
+        </div>
+        ${appState.user.isAdmin ? renderAdmin() : ""}
+      `;
+    }
+
+    function triggerPfpUpload() {
+      document.getElementById("pfpFileInput").click();
+    }
+
+    function handlePfpUpload(e) {
+      const t = e.target.files[0];
+      if (t) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          appState.pfpUrl = evt.target.result;
+          renderApp();
+        };
+        reader.readAsDataURL(t);
+      }
+    }
+
+    // Initialize application
+    async function init() {
+      let theme = "theme-pink";
+      try { theme = localStorage.getItem("theme") || theme; } catch {}
+      setTheme(theme);
+      renderApp();
+
+      try {
+        CATALOG = await (await fetch("catalog.json")).json();
+      } catch {}
+
+      try {
+        const [config, me] = await Promise.all([api("/api/config"), api("/api/me")]);
+        appState.config = config;
+        appState.user = me.user;
+        if (new URLSearchParams(location.search).get("google") === "failed") {
+          appState.error = "Google sign-in didn't work. Please try again.";
+        }
+      } catch {
+        appState.serverOnline = false;
+      }
+      renderApp();
+      loadTab(appState.currentTab);
+    }
+
+    init();
+  </script>
+</body>
+</html>

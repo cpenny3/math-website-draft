@@ -1,0 +1,34 @@
+{
+  "grades": [
+    { "id": "elementary", "label": "Grade 5 or below" },
+    { "id": "middle", "label": "Grades 6-8" },
+    { "id": "high", "label": "Grades 9-12" },
+    { "id": "adult", "label": "College or adult" }
+  ],
+  "topics": [
+    { "id": "algebra", "label": "Algebra", "learn": ["Setting up equations", "Systems of equations", "Functions and polynomials"] },
+    { "id": "geometry", "label": "Geometry", "learn": ["Similar triangles", "Area and the Pythagorean theorem", "Circles and angles"] },
+    { "id": "number_theory", "label": "Number Theory", "learn": ["Divisibility and primes", "Modular arithmetic", "GCD and LCM"] },
+    { "id": "counting", "label": "Counting & Probability", "learn": ["Casework", "Combinations and permutations", "Complementary counting"] }
+  ],
+  "goals": [
+    { "id": "fun", "label": "Have fun and learn new ideas" },
+    { "id": "score", "label": "Raise my score" },
+    { "id": "qualify", "label": "Qualify for the next round (like AIME)" },
+    { "id": "friends", "label": "Meet other people who like math" },
+    { "id": "start", "label": "I'm brand new and want to get started" }
+  ],
+  "competitions": [
+    { "id": "moems", "name": "MOEMS", "grades": ["elementary", "middle"], "level": 1, "about": "Short monthly problem sets for younger students.", "link": "https://www.moems.org" },
+    { "id": "kangaroo", "name": "Math Kangaroo", "grades": ["elementary", "middle", "high"], "level": 1, "about": "A friendly, puzzle-style international contest.", "link": "https://mathkangaroo.org" },
+    { "id": "mathcounts", "name": "MATHCOUNTS", "grades": ["middle"], "level": 2, "about": "Middle school contest with school, chapter, state and national rounds.", "link": "https://www.mathcounts.org" },
+    { "id": "amc8", "name": "AMC 8", "grades": ["elementary", "middle"], "level": 2, "about": "25 questions in 40 minutes. A great first big contest.", "link": "https://artofproblemsolving.com/wiki/index.php/AMC_8_Problems_and_Solutions" },
+    { "id": "purple_comet", "name": "Purple Comet", "grades": ["middle", "high"], "level": 2, "about": "Free online team contest.", "link": "https://purplecomet.org" },
+    { "id": "amc10", "name": "AMC 10", "grades": ["middle", "high"], "level": 3, "about": "For grade 10 and below. Top scorers qualify for the AIME.", "link": "https://artofproblemsolving.com/wiki/index.php/AMC_10_Problems_and_Solutions" },
+    { "id": "amc12", "name": "AMC 12", "grades": ["high"], "level": 3, "about": "For grade 12 and below. Top scorers qualify for the AIME.", "link": "https://artofproblemsolving.com/wiki/index.php/AMC_12_Problems_and_Solutions" },
+    { "id": "arml", "name": "ARML", "grades": ["high"], "level": 3, "about": "A national team competition held each spring.", "link": "https://www.arml.com" },
+    { "id": "hmmt", "name": "HMMT", "grades": ["high"], "level": 4, "about": "Harvard-MIT tournament with November and February rounds.", "link": "https://www.hmmt.org" },
+    { "id": "aime", "name": "AIME", "grades": ["middle", "high"], "level": 4, "about": "Invitation-only 15-question exam for top AMC scorers.", "link": "https://artofproblemsolving.com/wiki/index.php/AIME_Problems_and_Solutions" },
+    { "id": "usamo", "name": "USA(J)MO", "grades": ["high"], "level": 5, "about": "Proof-based olympiad for top AIME scorers.", "link": "https://artofproblemsolving.com/wiki/index.php/USAMO" }
+  ]
+}
